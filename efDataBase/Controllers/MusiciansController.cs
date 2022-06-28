@@ -24,61 +24,36 @@ namespace efDataBase.Controllers
             _dbService = dbService;
         }
 
-        //[HttpPut]
-        //[Route("{idKlienta}/orders")]
-        //public async Task<IActionResult> EditDoctor([FromBody] AddZamowienie addZamowienie, [FromRoute] int idKlienta)
+        
+
+        //[HttpDelete]
+        //[Route("{idMusician}")]
+        //public async Task<IActionResult> DeleteMusician([FromRoute] int idMusician)
         //{
         //    try
         //    {
-        //        if (!await _dbService.DoesKlientExist(idKlienta)) return NotFound("Klient o podanym id nie istnieje");
-        //        if (addZamowienie.WyrobyCukiernicze.Count() < 1) return BadRequest("Nie podano żadnych wyrobów cukierniczych");
+        //        if (await _dbService.DoesMusicianExist(idMusician))
+        //        {
 
-        //        if (!await _dbService.CheckWyroby(addZamowienie.WyrobyCukiernicze)) return NotFound("Podany wyrób nie istnieje");
-        //        if (!await _dbService.AddZamowienie(idKlienta, addZamowienie)) return Conflict();
-        //        return Ok("Dodano nowe zamówienie");
-        //    }
-        //    catch (System.Exception)
-        //    {
-        //        return Conflict();
-        //    }
-        //}
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetDoctors()
-        //{
-        //    var doctors = await _dbService.GetDoctors();
-        //    return Ok(doctors);
-        //}
-
-        [HttpDelete]
-        [Route("{idMusician}")]
-        public async Task<IActionResult> DeleteMusician([FromRoute] int idMusician)
-        {
-            try
-            {
-                if (await _dbService.DoesMusicianExist(idMusician))
-                {
-
-                    if (await _dbService.DeleteMusician(idMusician)) { 
-                    return Ok("Musician is removed");
-                }
-                else
-                {
-                        return BadRequest("Musician cannot be removed");
+        //            if (await _dbService.DeleteMusician(idMusician)) { 
+        //            return Ok("Musician is removed");
+        //        }
+        //        else
+        //        {
+        //                return BadRequest("Musician cannot be removed");
                       
-                    }
-                }
-                else
-                {
-                    return NotFound("That musician doesn't exist");
-                }
-            }
-            catch (Exception e)
-            {
-                return NotFound(e.Message);
-            }
-        }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return NotFound("That musician doesn't exist");
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return NotFound(e.Message);
+        //    }
+        //}
 
         //[HttpPut]
         //[Route("{idDoctor}")]
@@ -107,6 +82,33 @@ namespace efDataBase.Controllers
         //    {
         //        return NotFound(e.Message);
         //    }
+        //}
+
+        //[HttpPut]
+        //[Route("{idKlienta}/orders")]
+        //public async Task<IActionResult> EditDoctor([FromBody] AddZamowienie addZamowienie, [FromRoute] int idKlienta)
+        //{
+        //    try
+        //    {
+        //        if (!await _dbService.DoesKlientExist(idKlienta)) return NotFound("Klient o podanym id nie istnieje");
+        //        if (addZamowienie.WyrobyCukiernicze.Count() < 1) return BadRequest("Nie podano żadnych wyrobów cukierniczych");
+
+        //        if (!await _dbService.CheckWyroby(addZamowienie.WyrobyCukiernicze)) return NotFound("Podany wyrób nie istnieje");
+        //        if (!await _dbService.AddZamowienie(idKlienta, addZamowienie)) return Conflict();
+        //        return Ok("Dodano nowe zamówienie");
+        //    }
+        //    catch (System.Exception)
+        //    {
+        //        return Conflict();
+        //    }
+        //}
+
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetDoctors()
+        //{
+        //    var doctors = await _dbService.GetDoctors();
+        //    return Ok(doctors);
         //}
 
 

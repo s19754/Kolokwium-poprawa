@@ -13,30 +13,30 @@ namespace efDataBase.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlbumsController : Controller 
+    public class TeamsController : Controller 
     {
         
         private readonly IDbService _dbService;
 
        
-        public AlbumsController(IDbService dbService)
+        public TeamsController(IDbService dbService)
         {
             _dbService = dbService;
         }
 
         [HttpGet]
-        [Route("{idAlbum}")]
-        public async Task<IActionResult> GetAlbum([FromRoute] int idAlbum)
+        [Route("{idTeam}")]
+        public async Task<IActionResult> GetAlbum([FromRoute] int idTeam)
         {
             try
             {
-                if (await _dbService.DoesAlbumExist(idAlbum))
+                if (await _dbService.DoesTeamExist(idTeam))
                 {
-                    return Ok(await _dbService.GetAlbum(idAlbum));
+                    return Ok(await _dbService.GetTeam(idTeam));
                 }
                 else
                 {
-                    return NotFound("That album doesn't exist");
+                    return NotFound("That team doesn't exist");
                 }
             }
             catch (Exception)

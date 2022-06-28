@@ -13,6 +13,6 @@ namespace efDataBase.Models
         }
 
 
-        public virtual Track Track { get; set; }
+        public virtual Member Track { get; set; }
     }
 }

@@ -18,56 +18,20 @@ namespace efDataBase.Services
             _context = context;
         }
 
-        public async Task<bool> DoesAlbumExist(int idAlbum)
+
+
+        public async Task<IEnumerable<SomeKindOfTeam>> GetTeam(int idTeam)
         {
-            var album = await _context.Albums.Where(e => e.IdAlbum == idAlbum).FirstOrDefaultAsync();
-            if (album is null) return false;
-            return true;
-        }
-
-        //public async Task<IEnumerable<SomeSortOfZamowienie>> GetZamowienia()
-        //{
-        //    return await _context.Zamowienia
-        //        .Select(e => new SomeSortOfZamowienie
-        //        {
-        //            DataPrzyjecia = e.DataPrzyjecia,
-        //            DataRealizacji = e.DataRealizacji,
-        //            Uwagi = e.Uwagi,
-        //            Klient = new SomeSortOfOsoba
-        //            {
-        //                Imie = e.Klient.Imie,
-        //                Nazwisko = e.Klient.Nazwisko
-        //            },
-        //            Pracownik = new SomeSortOfOsoba
-        //            {
-        //                Imie = e.Pracownik.Imie,
-        //                Nazwisko = e.Pracownik.Nazwisko
-        //            },
-        //            WyrobyCukiernicze = e.Zamowienie_WyrobCukiernicze.Select(e => new SomeSortOfZamowienieWyrobCukierniczy
-        //            {
-        //                Nazwa = e.WyrobCukierniczy.Nazwa,
-        //                CenaZaSzt = e.WyrobCukierniczy.CenaZaSzt,
-        //                Typ = e.WyrobCukierniczy.Typ,
-        //                Ilosc = e.Ilosc,
-        //                Uwagi = e.Uwagi
-        //            })
-        //        }).ToListAsync();
-
-
-        //}
-
-        public async Task<IEnumerable<SomeKindOfAlbum>> GetAlbum(int idAlbum)
-        {
-            return await _context.Albums.Where(e => e.IdAlbum == idAlbum)
-                .Select(e => new SomeKindOfAlbum
+            return await _context.Teams.Where(e => e.TeamID == idTeam).Include(e => e.Memberships).Include(e => e.Organization)
+                .Select(e => new SomeKindOfTeam
                 {
-                    AlbumName = e.AlbumName,
-                    PublishDate = e.PublishDate,
-                    Tracks = e.Tracks.Select(e => new SomeKindOfTrack
+                    TeamName = e.TeamName,
+                    TeamDescription = e.TeamDescription,
+                    Organization = new SomeKindOfOrganization {OrganizationName = e.Organization.OrganizationName },
                     {
                         TrackName = e.TrackName,
                         Duration = e.Duration
-                    }).OrderBy(e=>e.Duration).ToList()
+                    }).OrderBy(e => e.Duration).ToList()
                 }).ToListAsync();
         }
 
@@ -81,45 +45,42 @@ namespace efDataBase.Services
         public async Task<bool> DoesMusicianCanBeRemowed(int idMusician)
         {
 
-            //var tracks = await _context.Musician.Include(e => e.Musician_Tracks).Where(e => e.IdMusician == idMusician).Select(e => new SomeKindOfMusician {
-            //    Track = e.Musician_Tracks.Select(e => e.Track).Where(e => e.IdMusicAlbum != null).FirstOrDefault()
-            //}).ToListAsync();
             var tracks = await _context.Musician.Where(e => e.IdMusician == idMusician)
                 .Include(e => e.Musician_Tracks)
                 .Where(c => c.Musician_Tracks.Any(i => i.Track.IdMusicAlbum != null))
                 .ToListAsync();
-           
+
             if (tracks.Count() == 0) return true;
             return false;
         }
 
 
-        public async Task<bool> DeleteMusician(int Musician)
-        {
+        //public async Task<bool> DeleteMusician(int Musician)
+        //{
 
-            var tracks = await _context.Musician.Where(e => e.IdMusician == Musician)
-                .Include(e => e.Musician_Tracks)
-                .Where(c => c.Musician_Tracks.Any(i => i.Track.IdMusicAlbum != null))
-                .ToListAsync();
+        //    var tracks = await _context.Musician.Where(e => e.IdMusician == Musician)
+        //        .Include(e => e.Musician_Tracks)
+        //        .Where(c => c.Musician_Tracks.Any(i => i.Track.IdMusicAlbum != null))
+        //        .ToListAsync();
 
-            if (tracks.Count() == 0)
-            {
-                var musician = await _context.Musician.Where(e => e.IdMusician == Musician).FirstOrDefaultAsync();
-               foreach(var item in musician.Musician_Tracks)
-                {
-                    _context.Remove(item);
-                }
-                _context.Remove(musician);
+        //    if (tracks.Count() == 0)
+        //    {
+        //        var musician = await _context.Musician.Where(e => e.IdMusician == Musician).FirstOrDefaultAsync();
+        //       foreach(var item in musician.Musician_Tracks)
+        //        {
+        //            _context.Remove(item);
+        //        }
+        //        _context.Remove(musician);
 
-                await _context.SaveChangesAsync();
+        //        await _context.SaveChangesAsync();
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
 
 
@@ -169,6 +130,44 @@ namespace efDataBase.Services
         //        if (wyrob is null) return false;
         //    }
         //    return true;
+        //}
+
+        //public async Task<bool> DoesAlbumExist(int idAlbum)
+        //{
+        //    var album = await _context.Albums.Where(e => e.IdAlbum == idAlbum).FirstOrDefaultAsync();
+        //    if (album is null) return false;
+        //    return true;
+        //}
+
+        //public async Task<IEnumerable<SomeSortOfZamowienie>> GetZamowienia()
+        //{
+        //    return await _context.Zamowienia
+        //        .Select(e => new SomeSortOfZamowienie
+        //        {
+        //            DataPrzyjecia = e.DataPrzyjecia,
+        //            DataRealizacji = e.DataRealizacji,
+        //            Uwagi = e.Uwagi,
+        //            Klient = new SomeSortOfOsoba
+        //            {
+        //                Imie = e.Klient.Imie,
+        //                Nazwisko = e.Klient.Nazwisko
+        //            },
+        //            Pracownik = new SomeSortOfOsoba
+        //            {
+        //                Imie = e.Pracownik.Imie,
+        //                Nazwisko = e.Pracownik.Nazwisko
+        //            },
+        //            WyrobyCukiernicze = e.Zamowienie_WyrobCukiernicze.Select(e => new SomeSortOfZamowienieWyrobCukierniczy
+        //            {
+        //                Nazwa = e.WyrobCukierniczy.Nazwa,
+        //                CenaZaSzt = e.WyrobCukierniczy.CenaZaSzt,
+        //                Typ = e.WyrobCukierniczy.Typ,
+        //                Ilosc = e.Ilosc,
+        //                Uwagi = e.Uwagi
+        //            })
+        //        }).ToListAsync();
+
+
         //}
 
 
